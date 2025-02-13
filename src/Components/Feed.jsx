@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CiBookmark, CiShare2 } from "react-icons/ci";
 import { FaBookmark } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
-const Feed = ({ jobs, setCurrentPage, totalPages }) => {
+const Feed = ({ jobs, setCurrentPage, totalPages ,jobTypes}) => {
     const [savedMessages, setSavedMessages] = useState([]);
 
     const toggleBookmark = (job) => {
@@ -14,13 +14,16 @@ const Feed = ({ jobs, setCurrentPage, totalPages }) => {
                 return prevSaved.filter((savedJob) => savedJob.title !== job.title);
             }
         });
-    };
+    }; 
+   const filterdJobs = jobs.filter((job) => Array.isArray(jobTypes) && jobTypes.some((type) => type === job.type));
+
+
 
     return (
-        <div className=" flex justify-center gap-8 p-8">
-            <div className=" min-w-[628px] min-h-[750px] p-6 rounded-lg ">
-                {jobs?.length > 0 ? (
-                    jobs.map((job, index) => (
+        <div className="flex justify-center gap-8 p-8">
+        <div className="min-w-[628px] min-h-[750px] p-6 rounded-lg">
+          {jobs?.length > 0 ? (
+            jobs.map((job, index) => (
                         <div key={index} className="bg-white p-4 rounded-lg shadow-md min-w-[628px] min-h-[223px] mb-4">
                             <div className="flex justify-between">
                                 <div className="flex gap-4">
@@ -32,8 +35,10 @@ const Feed = ({ jobs, setCurrentPage, totalPages }) => {
                                         </div>
                                         <div className="flex gap-2">
                                             <div className="bg-gray-200 rounded-sm px-2 py-1 text-sm">{job.type}</div>
-                                            <div className="bg-gray-200 rounded-sm px-2 py-1 text-sm">{job.time}</div>
                                             <div className="bg-gray-200 rounded-sm px-2 py-1 text-sm">{job.salary}</div>
+                                            <div className="bg-gray-200 rounded-sm px-2 py-1 text-sm">{job.location}</div>
+                                            <div className="bg-gray-200 rounded-sm px-2 py-1 text-sm">{job.experienceLevel}</div>
+                                            <div className="bg-gray-200 rounded-sm px-2 py-1 text-sm">{job.currency}</div>
                                         </div>
                                     </div>
                                 </div>

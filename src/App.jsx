@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Route, BrowserRouter as Router, Routes, } from "react-router-dom";
 import Feed from './Components/Feed';
 import Filter from './Components/Filter';
 import Header from './Components/Header';
+import Login from './Components/Login';
 import Pagination from './Components/Pagination';
 import Search from './Components/Search';
 
@@ -10,18 +12,31 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({});
+  const [locationQuery, setLocationQuery] = useState("");
+  const [filters, setFilters] = useState({
+    jobTypes: [],
+    location: "",
+    experienceLevel: "",
+    currency: "",
+    minValue: 20,
+    maxValue: 2000,
+  });
+  const [jobTypes, setJobTypes] = useState([]); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const itemsPerPage = 4;
 
-  // Fetch jobs with search and filters
   useEffect(() => {
+    console.log("Selected Job Types:", jobTypes);
     const fetchJobs = async () => {
       try {
-        // Build query parameters
+        setLoading(true);
         const params = new URLSearchParams({
           page: currentPage,
           limit: itemsPerPage,
           search: searchQuery,
+          location: locationQuery,
+          types: jobTypes,
           ...filters
         });
 
@@ -30,57 +45,86 @@ function App() {
         );
         const data = await response.json();
         
+        if(!response.ok) throw new Error(data.message || "Failed to fetch");
+        
         setJobs(data.jobs || []);
         setTotal(data.total || 0);
+        setError(null);
       } catch (error) {
         console.error("Error fetching jobs:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchJobs();
-  }, [currentPage, searchQuery, filters]);
+  }, [currentPage, searchQuery, locationQuery, filters, jobTypes]);
 
-  // Handle filter changes
-  const handleFilterChange = (newFilters) => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
-    setCurrentPage(1); // Reset to first page when filters change
-  };
 
-  // Reset all filters
-  const handleResetFilters = () => {
-    setFilters({});
-    setSearchQuery("");
+
+  const handleSearch = (query, location) => {
+    setSearchQuery(query);
+    setLocationQuery(location);
     setCurrentPage(1);
   };
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+    setCurrentPage(1); 
+
+  };
+
+  const handleResetFilters = () => {
+     setFilters({
+     jobTypes: "",   
+      location: "",
+      experienceLevel: "",
+      currency: "",
+      minValue: 20,
+      maxValue: 2000,
+    });
+    setSearchQuery("");
+    setLocationQuery("");
+    setCurrentPage(1);
+  };
+  
   return (
     <>
-      <Header />
-      
+    <Router>
+    <Header />
+    <Routes>
+          {/* <Route path="/about" element={<About />} /> */}
+          <Route path="/Login" element={<Login />} />
+      </Routes>      
+      </Router>
       <div className="container mx-auto px-4">
-        {/* Search Component */}
         <div className="my-4">
           <Search
             query={searchQuery}
             setQuery={setSearchQuery}
-            onSearch={() => setCurrentPage(1)}
+            onSearch={handleSearch}
+            locQuery={locationQuery}
           />
         </div>
 
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Filter Component */}
           <div className="w-full md:w-1/4">
             <Filter
+              jobTypes={jobTypes}
+              setJobTypes={setJobTypes}
               onFilterChange={handleFilterChange}
               onResetFilters={handleResetFilters}
             />
           </div>
-
-          {/* Main Content */}
           <div className="w-full md:w-3/4">
-            <Feed jobs={jobs} />
-            
-            {/* Pagination */}
+            <Feed 
+            jobs={jobs} 
+             jobTypes={jobTypes}
+             setJobTypes={setJobTypes}
+             loading={loading}
+             error={error}
+            />
             {jobs.length > 0 && (
               <Pagination
                 currentPage={currentPage}
