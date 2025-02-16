@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/JobLogo.png';
-const NavBar = () => {
+const Header = () => {
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-6xl mx-auto px-4">
@@ -18,7 +18,7 @@ const NavBar = () => {
           </div>
 
           <div className="flex space-x-5 w-[370px] h-[48px]">
-            <Link to="/Login" className="bg-blue-600 w-[156px] h-[40px] text-center text-white px-4 py-2 mt-1 ml-3 rounded hover:bg-blue-700">Login</Link> 
+            <Link to="/LoginPage" className="bg-blue-600 w-[156px] h-[40px] text-center text-white px-4 py-2 mt-1 ml-3 rounded hover:bg-blue-700">Login</Link>
             <Link to="/" className="bg-white-600 w-[166px] h-[40px] text-center border-1 border-[#0034D1] text-[#2F2F2F] px-5 py-2 mt-1 rounded hover:bg-blue-500">Sign In</Link>
           </div>
         </div>
@@ -27,4 +27,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default Header;
