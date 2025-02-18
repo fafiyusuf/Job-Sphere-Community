@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Feed from '../Components/Feed';
 import Filter from '../Components/Filter';
-import Header from '../Components/Header';
 import Pagination from '../Components/Pagination';
 import Search from '../Components/Search';
 
@@ -90,7 +89,7 @@ function Home() {
   
   return (
     <>
-      <Header />
+      {/* <Header /> */}
 
       <div className="container mx-auto px-4">
         <div className="my-4">

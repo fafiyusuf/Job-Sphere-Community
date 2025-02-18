@@ -15,7 +15,6 @@ const Feed = ({ jobs, setCurrentPage, totalPages ,jobTypes}) => {
             }
         });
     }; 
-   const filterdJobs = jobs.filter((job) => Array.isArray(jobTypes) && jobTypes.some((type) => type === job.type));
 
 
 
@@ -24,7 +23,7 @@ const Feed = ({ jobs, setCurrentPage, totalPages ,jobTypes}) => {
         <div className="min-w-[628px] min-h-[750px] p-6 rounded-lg">
           {jobs?.length > 0 ? (
             jobs.map((job, index) => (
-                        <div key={index} className="bg-white p-4 rounded-lg shadow-md min-w-[628px] min-h-[223px] mb-4">
+                        <div key={index} className="bg-white p-4 rounded-lg shadow-md min-w-[628px] min-h-[223px] mb-4" on>
                             <div className="flex justify-between">
                                 <div className="flex gap-4">
                                     <img src={job.logo} alt="Logo" className="w-16 h-16" />

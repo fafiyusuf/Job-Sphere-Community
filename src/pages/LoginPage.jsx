@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 function LoginPage() {
   return (
     <div className="flex justify-center items-center h-[80vh]">
       <div className="bg-white w-[400px] h-[500px] shadow-md rounded-lg">
-        {/* <div className="flex justify-center items-center h-16">
-          <img src={Logo} className="bg-blue-700 text-xl font-bold w-[149px] h-[52px] p-1 rounded"/>
-        </div> */}
+        <div className="flex justify-center items-center h-16">
+          <img src={logo} className="bg-blue-700 text-xl font-bold w-[149px] h-[52px] p-1 rounded"/>
+        </div> 
         <div className="flex flex-col items-center space-y-5">
           <h1 className="text-2xl font-bold text-gray-700">Login</h1>
           <input type="text" placeholder="Email" className="w-[300px] h-[40px] border-2 border-gray-300 rounded-lg px-5"/>
