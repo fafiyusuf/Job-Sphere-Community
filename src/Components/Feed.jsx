@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { CiBookmark, CiShare2 } from "react-icons/ci";
 import { FaBookmark } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 const Feed = ({ jobs, setCurrentPage, totalPages ,jobTypes}) => {
     const [savedMessages, setSavedMessages] = useState([]);
+    const navigate = useNavigate (); 
 
     const toggleBookmark = (job) => {
         setSavedMessages((prevSaved) => {
@@ -20,7 +22,7 @@ const Feed = ({ jobs, setCurrentPage, totalPages ,jobTypes}) => {
 
     return (
         <div className="flex justify-center gap-8 p-8">
-        <div className="min-w-[628px] min-h-[750px] p-6 rounded-lg">
+        <div className="min-w-[628px] min-h-[750px] p-6 rounded-lg ">
           {jobs?.length > 0 ? (
             jobs.map((job, index) => (
                         <div key={index} className="bg-white p-4 rounded-lg shadow-md min-w-[628px] min-h-[223px] mb-4" on>
@@ -29,7 +31,7 @@ const Feed = ({ jobs, setCurrentPage, totalPages ,jobTypes}) => {
                                     <img src={job.logo} alt="Logo" className="w-16 h-16" />
                                     <div className="flex flex-col justify-between">
                                         <div>
-                                            <h1 className="text-xl font-bold">{job.title}</h1>
+                                            <h1 onClick={()=>navigate(`jobs/${job.id}`)} className="text-xl font-bold">{job.title}</h1>
                                             <p className="text-gray-600">{job.company}</p>
                                         </div>
                                         <div className="flex gap-2">

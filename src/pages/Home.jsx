@@ -4,7 +4,6 @@ import Filter from '../Components/Filter';
 import Pagination from '../Components/Pagination';
 import Search from '../Components/Search';
 
-
 function Home() {
   const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +24,6 @@ function Home() {
   const itemsPerPage = 4;
 
   useEffect(() => {
-    console.log("Selected Job Types:", jobTypes);
     const fetchJobs = async () => {
       try {
         setLoading(true);
@@ -34,7 +32,7 @@ function Home() {
           limit: itemsPerPage,
           search: searchQuery,
           location: locationQuery,
-          types: jobTypes,
+          types: jobTypes.join(','), 
           ...filters
         });
 
@@ -43,7 +41,7 @@ function Home() {
         );
         const data = await response.json();
         
-        if(!response.ok) throw new Error(data.message || "Failed to fetch");
+        if (!response.ok) throw new Error(data.message || "Failed to fetch");
         
         setJobs(data.jobs || []);
         setTotal(data.total || 0);
@@ -57,9 +55,7 @@ function Home() {
     };
 
     fetchJobs();
-  }, [currentPage, searchQuery, locationQuery, filters, jobTypes]);
-
-
+  }, [currentPage, searchQuery, locationQuery, filters, jobTypes]); // Add jobTypes to the dependency array
 
   const handleSearch = (query, location) => {
     setSearchQuery(query);
@@ -70,12 +66,11 @@ function Home() {
   const handleFilterChange = (newFilters) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
     setCurrentPage(1); 
-
   };
 
   const handleResetFilters = () => {
-     setFilters({
-     jobTypes: "",   
+    setFilters({
+      jobTypes: [], 
       location: "",
       experienceLevel: "",
       currency: "",
@@ -85,12 +80,11 @@ function Home() {
     setSearchQuery("");
     setLocationQuery("");
     setCurrentPage(1);
+    setJobTypes([]);
   };
   
   return (
     <>
-      {/* <Header /> */}
-
       <div className="container mx-auto px-4">
         <div className="my-4">
           <Search
@@ -111,19 +105,23 @@ function Home() {
             />
           </div>
           <div className="w-full md:w-3/4">
-            <Feed 
-            jobs={jobs} 
-             jobTypes={jobTypes}
-             setJobTypes={setJobTypes}
-             loading={loading}
-             error={error}
-            />
-            {jobs.length > 0 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(total / itemsPerPage)}
-                onPageChange={setCurrentPage}
-              />
+            {loading ? (
+              <div className="text-center">Loading jobs...</div>
+            ) : (
+              <>
+                <Feed 
+                  jobs={jobs} 
+                  loading={loading}
+                  error={error}
+                />
+                {jobs.length > 0 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(total / itemsPerPage)}
+                    onPageChange={setCurrentPage}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>
