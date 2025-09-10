@@ -89,7 +89,6 @@ const Feed = ({ jobs, setCurrentPage, totalPages ,jobTypes}) => {
                     <p className="text-gray-500">No saved jobs</p>
                 )}
             </div>
-            
         </div>
     );
 };
